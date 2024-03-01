@@ -45,7 +45,7 @@ class UnitV2Sender(object):
         
         # Sender process
         self.run = True # always true makes sure the loop runs
-        self.test_run = True # if true only runs for three loops
+        self.test_run = False # if true only runs for three loops
         self.run_counter = 0 # keeps track of the runs
         self.classes = classes # the object classes to be detected
         self.probability_treshhold = probability_treshhold # threshold of detection
@@ -59,15 +59,16 @@ class UnitV2Sender(object):
         self.setup() # starts the model and initiates recognizer
     
     def test_log(self, msg):
-
-        if self.test_run_counter >= 3:
-            print("Test Done")
-            sys.exit()
-
+        
         if not self.test_run:
             return
         
-        print(msg)        
+        print(msg)
+
+        if self.run_counter >= 3:
+            print("Test Done")
+            sys.exit()
+
         
 
     def setup(self):    
@@ -99,7 +100,7 @@ class UnitV2Sender(object):
         self.test_log(f'sending payload: {self.payload}')   
 
         if not self.test_run:
-            requests.post(url=self.server_ip, json=self.payload)
+            requests.post(url=self.post_adress, json=self.payload)
 
         self.reset_payload()
 
@@ -115,10 +116,7 @@ class UnitV2Sender(object):
             line = self.recognizer.stdout.readline().decode('utf-8').strip()
 
             try:
-                print("trying")
-                print(line)
                 doc = json.loads(line)                
-                print("after trying")
                 
                 if 'img' in doc:
                     self.payload['img'] = doc['img']
@@ -142,8 +140,8 @@ class UnitV2Sender(object):
                     self.send_payload()
 
                     self.timer = datetime.now()     
-                    self.test_run_counter = self.test_run_counter + 1   
-                    self.test_log("counter: " + self.test_run_counter)
+                    self.run_counter = self.run_counter + 1   
+                    self.test_log("counter: " + str(self.run_counter))
 
             except JSONDecodeError as e:
                 print("Error: Invalid JSON string")
