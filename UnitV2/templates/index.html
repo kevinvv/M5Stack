@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Motion Heatmap Gifs</title>
+</head>
+<body>
+<h1>Motion Heatmaps Gifs</h1>
+
+{% for gif in gifs %} 
+
+    <h3>{{gif}}</h3>
+    <img src="resources/gifs/{{gif}}">    
+
+{% endfor %}
+</body>
+</html> 

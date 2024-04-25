@@ -1,0 +1,9 @@
+.DS_Store
+*.jpg
+.DS_store
+*/.DS_store
+*/__pycache__/*
+*.pyc
+*.gif
+*.avi
+*.pyc
